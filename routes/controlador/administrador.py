@@ -9,7 +9,7 @@ def crear_evento():
         nombre = request.form['nombre']
         fecha = request.form['fecha']
         edicion = request.form['edicion']
-        nuevo_evento = Evento.crear_evento(nombre, fecha, edicion)
+        Evento.crear_evento(nombre, fecha, edicion)
         flash('Evento creado exitosamente', 'success')
     except Exception as e:
         flash(f'Error al crear el evento: {str(e)}', 'error')

@@ -25,12 +25,12 @@ def actualizar_perfil():
     usuario = Usuario.query.get(usuario_id)
     
     if usuario:
-        # Actualiza la información del usuario con los datos del formulario
+        
         usuario.nombres = request.form.get('nombres')
         usuario.apellidos = request.form.get('apellidos')
         usuario.fecha_nacimiento = request.form.get('fecha_nacimiento')
         usuario.nacionalidad = request.form.get('nacionalidad')
-        # Añadir código aquí para actualizar otros campos si es necesario
+        
         db.session.commit()
         
         return redirect(url_for('perfil.mostrar_perfil'))
