@@ -19,3 +19,8 @@ def login():
             return redirect(url_for('home.home_page'))
 
     return render_template('vista/assets/HTML/login.html')
+
+@inicio_sesion.route('/logout')
+def logout():
+    session.pop('usuario_id', None)
+    return redirect(url_for('home.home_page'))
