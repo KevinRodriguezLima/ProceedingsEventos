@@ -30,4 +30,3 @@ def registro():
     except Exception as e:
         flash(f'Ocurrió un error: {str(e)}')
         return redirect(url_for('registrarse.home_register'))
-
