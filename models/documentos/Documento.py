@@ -1,3 +1,4 @@
+# models/documentos/Documento.py
 from utils.repositorios.sqlAlchemy.conexionBd import db
 
 class Documento(db.Model):
@@ -9,12 +10,13 @@ class Documento(db.Model):
     evento_id = db.Column(db.Integer, db.ForeignKey('evento.id'), nullable=False)
     autores = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, resumen, datos, conclusion, num_pag, evento_id):
+    def __init__(self, resumen, datos, conclusion, num_pag, evento_id, autores):
         self.resumen = resumen
         self.datos = datos
         self.conclusion = conclusion
         self.num_pag = num_pag
         self.evento_id = evento_id
+        self.autores = autores
 
     def mostrar_documento(self):
         return {
@@ -22,13 +24,14 @@ class Documento(db.Model):
             "resumen": self.resumen,
             "datos": self.datos,
             "conclusion": self.conclusion,
-            "num_pag": self.num_pag
+            "num_pag": self.num_pag,
+            "autores": self.autores
         }
 
     @staticmethod
-    def crear_documento(resumen, datos, conclusion, num_pag, evento_id):
+    def crear_documento(resumen, datos, conclusion, num_pag, evento_id, autores):
         try:
-            nuevo_documento = Documento(resumen, datos, conclusion, num_pag, evento_id)
+            nuevo_documento = Documento(resumen, datos, conclusion, num_pag, evento_id, autores)
             db.session.add(nuevo_documento)
             db.session.commit()
             return nuevo_documento

@@ -37,7 +37,7 @@
             <tbody>
                 {% for evento in eventos %}
                 <tr>
-                    <td>{{ evento.nombre }}</td>
+                    <td><a href="{{ url_for('home.detalle_evento', evento_id=evento.id) }}">{{ evento.nombre }}</a></td>
                     <td>{{ evento.descripcion }}</td>
                     <td>{{ evento.autores }}</td>
                     <td>{{ evento.responsables }}</td>
