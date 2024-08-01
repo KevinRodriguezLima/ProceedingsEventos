@@ -28,7 +28,8 @@ def actualizar_perfil():
         
         usuario.nombres = request.form.get('nombres')
         usuario.apellidos = request.form.get('apellidos')
-        usuario.fecha_nacimiento = request.form.get('fecha_nacimiento')
+        fecha_nacimiento = request.form.get('fecha_nacimiento')
+        usuario.fecha_nacimiento = fecha_nacimiento if fecha_nacimiento else None
         usuario.nacionalidad = request.form.get('nacionalidad')
         
         db.session.commit()

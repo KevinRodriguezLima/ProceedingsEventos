@@ -63,10 +63,10 @@
                             {% if usuario.fecha_nacimiento %}
                                 {{ usuario.fecha_nacimiento.strftime('%d/%m/%Y') }}
                             {% else %}
-                                No disponible
+                                None
                             {% endif %}
                         </span>
-                        <input type="date" name="fecha_nacimiento" value="{{ usuario.fecha_nacimiento.strftime('%Y-%m-%d') }}" style="display: none;" disabled>
+                        <input type="date" name="fecha_nacimiento" value="{% if usuario.fecha_nacimiento %}{{ usuario.fecha_nacimiento.strftime('%Y-%m-%d') }}{% endif %}" style="display: none;" disabled>
                     </p>
                     <p><strong>Nacionalidad:</strong>
                         <span class="text-value">{{ usuario.nacionalidad }}</span>
