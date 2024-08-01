@@ -8,12 +8,14 @@ class Usuario(db.Model):
     fecha_nacimiento = db.Column(db.Date)
     nacionalidad = db.Column(db.String(120))
     contrasenia = db.Column(db.String(255))
+    es_admin = db.Column(db.Boolean, default=False)
 
-    def __init__(self, nombres, apellidos, email,contrasenia):
+    def __init__(self, nombres, apellidos, email, contrasenia, es_admin=False):
         self.nombres = nombres
         self.apellidos = apellidos
         self.email = email
         self.contrasenia = contrasenia
+        self.es_admin = es_admin
     
     @classmethod
     def buscar_por_email(cls, email):

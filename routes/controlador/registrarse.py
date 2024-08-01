@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from utils.servicios.ServicioUsuario import UsuarioServicio
 from utils.repositorios.sqlAlchemy.conexionBd import db
-from models.entidades.FabricaUsuario import FabricaUsuario  # Importa la fábrica
+from models.entidades.FabricaUsuario import FabricaUsuario
 
 registrarse = Blueprint('registrarse', __name__, template_folder='../templates/vista/HTML')
 
@@ -16,8 +16,13 @@ def registro():
         apellidos = request.form['apellidos'].strip()
         email = request.form['email'].strip()
         contrasenia = request.form['contrasenia'].strip()
+        codigo_administracion = request.form['codigo_administracion'].strip()
 
-        nuevo_usuario = FabricaUsuario.crear_usuario(nombres, apellidos, email, contrasenia)
+        es_admin = False
+        if codigo_administracion == '123':
+            es_admin = True
+
+        nuevo_usuario = FabricaUsuario.crear_usuario(nombres, apellidos, email, contrasenia, es_admin)
         servicio_usuario = UsuarioServicio(nuevo_usuario)
 
         if not servicio_usuario.registrar_usuario():

@@ -18,3 +18,5 @@ def detalle_evento(evento_id):
         return render_template('vista/assets/HTML/detalle_evento.html', evento=evento)
     else:
         return "Evento no encontrado", 404
+
+        

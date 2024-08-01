@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#-*- coding: utf-8 -*-
 
 from utils.repositorios.sqlAlchemy.conexionBd import db
 from models.entidades.Usuario import Usuario

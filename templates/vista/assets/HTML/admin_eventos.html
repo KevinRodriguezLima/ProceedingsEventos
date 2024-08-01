@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana de la Computación</title>
+    <title>Eventos - Administración</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Semana de la Computación</a>
+        <a class="navbar-brand" href="{{ url_for('home.home_page') }}">Semana de la Computación</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if 'usuario_id' not in session %}
@@ -19,11 +19,6 @@
                         <a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a>
                     </li>
                 {% else %}
-                    {% if session.get('is_admin') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('administrador.dashboard') }}">Dashboard</a>
-                        </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a>
                     </li>
@@ -34,16 +29,18 @@
             </ul>
         </div>
     </nav>
-    
+
     <div class="container mt-5">
-        <h1>Eventos</h1>
-        <table class="table table-striped">
+        <h1 class="mb-4">Eventos</h1>
+        <a href="{{ url_for('administrador.crear_evento_form') }}" class="btn btn-primary mb-3">Crear Evento</a>
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Autores</th>
                     <th>Responsables</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,21 +50,16 @@
                     <td>{{ evento.descripcion }}</td>
                     <td>{{ evento.autores }}</td>
                     <td>{{ evento.responsables }}</td>
+                    <td>
+                        <form action="{{ url_for('administrador.eliminar_evento', id=evento.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                        <a href="{{ url_for('administrador.editar_evento', id=evento.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <h1>Noticias</h1>
-        <div class="list-group">
-            {% for noticia in noticias %}
-            <a href="#" class="list-group-item list-group-item-action">
-                <h5 class="mb-1">{{ noticia.titulo }}</h5>
-                <p class="mb-1">{{ noticia.contenido }}</p>
-                <small>{{ noticia.fecha }}</small>
-            </a>
-            {% endfor %}
-        </div>
     </div>
 </body>
 </html>

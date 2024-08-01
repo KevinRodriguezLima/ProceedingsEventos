@@ -23,3 +23,6 @@ class UsuarioServicio:
     
     def obtener_id_usuario(self):
         return self.usuario_repositorio.consultar_usuario().id
+
+    def es_admin(self):
+        return self.usuario_repositorio.consultar_usuario().es_admin
