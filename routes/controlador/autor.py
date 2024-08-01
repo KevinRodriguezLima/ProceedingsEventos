@@ -12,7 +12,7 @@ def subir_documento():
         conclusion = request.form['conclusion']
         num_pag = request.form['num_pag']
         evento_id = request.form['evento_id']
-        nuevo_documento = Documento.crear_documento(resumen, datos, conclusion, num_pag, evento_id)
+        Documento.crear_documento(resumen, datos, conclusion, num_pag, evento_id)
         flash('Documento subido exitosamente', 'success')
     except Exception as e:
         flash(f'Error al subir el documento: {str(e)}', 'error')
