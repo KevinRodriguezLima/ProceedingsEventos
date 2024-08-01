@@ -1,80 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Evento</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('home.home_page') }}">Semana de la Computación</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if 'usuario_id' not in session %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('inicio_sesion.login') }}">Ingresar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('inicio_sesion.logout') }}">Cerrar Sesión</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+{% extends "vista/assets/HTML/base.html" %}
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Crear Evento</h1>
-        <form action="{{ url_for('administrador.crear_evento') }}" method="POST">
-            <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                <input type="text" id="descripcion" name="descripcion" class="form-control" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="autores">Autores:</label>
-                <input type="text" id="autores" name="autores" class="form-control" required>
-            </div>
+{% block title %}Crear Evento{% endblock %}
 
-            <div class="form-group">
-                <label for="responsables">Responsables:</label>
-                <input type="text" id="responsables" name="responsables" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="resumen">Resumen del Documento:</label>
-                <textarea id="resumen" name="resumen" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="datos">Datos del Documento:</label>
-                <textarea id="datos" name="datos" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="conclusion">Conclusión del Documento:</label>
-                <textarea id="conclusion" name="conclusion" class="form-control" rows="3" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="num_pag">Número de Páginas:</label>
-                <input type="number" id="num_pag" name="num_pag" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Crear Evento</button>
-        </form>
-    </div>
-</body>
-</html>
+{% block content %}
+    <h1 class="mb-4">Crear Evento</h1>
+    {% set action_url = 'administrador.crear_evento' %}
+    {% set button_text = 'Crear Evento' %}
+    {% set nombre = '' %}
+    {% set descripcion = '' %}
+    {% set autores = '' %}
+    {% set responsables = '' %}
+    {% set resumen = '' %}
+    {% set datos = '' %}
+    {% set conclusion = '' %}
+    {% set num_pag = '' %}
+    
+    {% include 'vista/assets/HTML/form_evento.html' %}
+{% endblock %}

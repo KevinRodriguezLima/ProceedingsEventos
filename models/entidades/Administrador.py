@@ -7,8 +7,3 @@ class Administrador(Usuario):
     def __init__(self, nombres, apellidos, email, contrasenia):
         super().__init__(nombres, apellidos, email, contrasenia)
 
-    def crear_evento(self, evento):
-        pass
-
-    def actualizar_evento(self, evento):
-        pass

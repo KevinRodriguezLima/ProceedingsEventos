@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Semana de la Computación{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('home.home_page') }}">Semana de la Computación</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if 'usuario_id' not in session %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio_sesion.login') }}">Ingresar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio_sesion.logout') }}">Cerrar Sesión</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -8,10 +8,11 @@ from routes.controlador.administrador import administrador
 from routes.controlador.autor import autor
 from utils.repositorios.sqlAlchemy.conexionBd import db
 from dotenv import load_dotenv
-
+from config import Config
 load_dotenv()
 
 app = Flask(__name__)
+app.config.from_object(Config)
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 db_user = os.getenv('DB_USER')

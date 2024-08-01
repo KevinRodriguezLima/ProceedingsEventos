@@ -1,60 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Evento</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('home.home_page') }}">Semana de la Computación</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if 'usuario_id' not in session %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('inicio_sesion.login') }}">Ingresar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('inicio_sesion.logout') }}">Cerrar Sesión</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
+{% extends "vista/assets/HTML/base.html" %}
+
+{% block title %}Editar Evento{% endblock %}
+
+{% block content %}
+    <h1>Editar Evento</h1>
+    {% set action_url = url_for('administrador.editar_evento', id=evento.id) %}
+    {% set button_text = 'Actualizar Evento' %}
+    {% set nombre = evento.nombre %}
+    {% set descripcion = evento.descripcion %}
+    {% set autores = evento.autores %}
+    {% set responsables = evento.responsables %}
+    {% set resumen = evento.resumen %}
+    {% set datos = evento.datos %}
+    {% set conclusion = evento.conclusion %}
+    {% set num_pag = evento.num_pag %}
     
-    <div class="container mt-5">
-        <h1>Editar Evento</h1>
-        <form action="{{ url_for('administrador.editar_evento', id=evento.id) }}" method="POST">
-            <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ evento.nombre }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                <input type="text" id="descripcion" name="descripcion" class="form-control" value="{{ evento.descripcion }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="autores">Autores:</label>
-                <input type="text" id="autores" name="autores" class="form-control" value="{{ evento.autores }}" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="responsables">Responsables:</label>
-                <input type="text" id="responsables" name="responsables" class="form-control" value="{{ evento.responsables }}" required>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">Actualizar Evento</button>
-        </form>
-    </div>
-</body>
-</html>
+    {% include 'vista/assets/HTML/form_evento.html' %}
+{% endblock %}
