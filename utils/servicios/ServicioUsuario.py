@@ -1,6 +1,5 @@
 from utils.repositorios.sqlAlchemy.UsuarioRepositorioImpl import UsuarioRepositorioImpl
-from utils.repositorios.sqlAlchemy.conexionBd import db
-from werkzeug.security import generate_password_hash
+
 class UsuarioServicio:
     def __init__(self, usuario = None):
         self.usuario_repositorio = UsuarioRepositorioImpl(usuario)
