@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'mi_clave_secreta_super_segura'
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')

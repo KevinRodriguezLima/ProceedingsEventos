@@ -1,12 +1,25 @@
-from utils.repositorios.sqlAlchemy.UsuarioRepositorioImpl import agregar_usuario_bd, verificar_usuario_bd
-from utils.repositorios.sqlAlchemy.conexionBd import db
+from utils.repositorios.sqlAlchemy.UsuarioRepositorioImpl import UsuarioRepositorioImpl
 
-def registrar_usuario(usuario):
-    
-    if not verificar_usuario_bd(usuario):
+class UsuarioServicio:
+    def __init__(self, usuario = None):
+        self.usuario_repositorio = UsuarioRepositorioImpl(usuario)
+    def registrar_usuario(self):
+        if not self.usuario_repositorio.verificar_usuario_bd():
+            return False
+        
+        self.usuario_repositorio.agregar_usuario_bd()
+        return True
+
+    def loggear_usuario(self,email, contrasenia):
+        self.usuario_repositorio.recuperar_usuario_by_email(email)
+
+        if self.usuario_repositorio.consultar_usuario() is None:
+            return False
+        
+        if self.usuario_repositorio.verificar_contrasenia(contrasenia):
+            return True
+
         return False
     
-    agregar_usuario_bd(usuario)
-    return True
-
-    
+    def obtener_id_usuario(self):
+        return self.usuario_repositorio.consultar_usuario().id

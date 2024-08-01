@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash
-from utils.servicios.ServicioUsuario import registrar_usuario
+from utils.servicios.ServicioUsuario import UsuarioServicio
 from utils.repositorios.sqlAlchemy.conexionBd import db
 from models.entidades.FabricaUsuario import FabricaUsuario  # Importa la fábrica
 
@@ -16,25 +15,19 @@ def registro():
         nombres = request.form['nombres'].strip()
         apellidos = request.form['apellidos'].strip()
         email = request.form['email'].strip()
-        contrasenia = generate_password_hash(request.form['contrasenia'].strip())
-        
-        if not (nombres and apellidos and email and contrasenia):
-            flash('Todos los campos son requeridos.')
-            return redirect(url_for('home_register'))
-
-        if '@' not in email or '.' not in email:
-            flash('El formato del email no es válido.')
-            return redirect(url_for('home_register'))
+        contrasenia = request.form['contrasenia'].strip()
 
         nuevo_usuario = FabricaUsuario.crear_usuario(nombres, apellidos, email, contrasenia)
+        servicio_usuario = UsuarioServicio(nuevo_usuario)
 
-        if registrar_usuario(nuevo_usuario):
-            session['usuario_id'] = nuevo_usuario.id
-            return redirect(url_for('home.home_page'))
-        else:
+        if not servicio_usuario.registrar_usuario():
             flash('El usuario ya existe')
             return redirect(url_for('registrarse.home_register'))
+        
+        session['usuario_id'] = servicio_usuario.obtener_id_usuario()
+        return redirect(url_for('home.home_page'))
 
     except Exception as e:
         flash(f'Ocurrió un error: {str(e)}')
         return redirect(url_for('registrarse.home_register'))
+
