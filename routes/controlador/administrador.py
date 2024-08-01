@@ -32,16 +32,15 @@ def crear_evento():
             responsables=responsables
         )
         db.session.add(evento)
-        db.session.commit()  # Confirmar el evento para obtener su ID
+        db.session.commit()  
         
-        # Crear el documento asociado usando FabricaDocumento
         fabrica_documento = FabricaDocumento()
         documento = fabrica_documento.crear_documento(
             resumen=resumen,
             datos=datos,
             conclusion=conclusion,
             num_pag=num_pag,
-            evento_id=evento.id  # El ID del evento se obtiene después de agregar el evento a la base de datos
+            evento_id=evento.id 
         )
         db.session.add(documento)
         db.session.commit()
@@ -50,7 +49,7 @@ def crear_evento():
     except Exception as e:
         db.session.rollback()
         flash(f'Error al crear el evento: {str(e)}', 'error')
-    return redirect(url_for('administrador.dashboard'))
+    return redirect(url_for(DASHBOARD_URL))
 
 @administrador.route('/crear_evento_form', methods=['GET'])
 def crear_evento_form():
