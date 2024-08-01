@@ -11,18 +11,25 @@
         <a class="navbar-brand" href="#">Semana de la Computación</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('inicio_sesion.login') }}">Ingresar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a>
-                </li>
+                {% if 'usuario_id' not in session %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('inicio_sesion.login') }}">Ingresar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('registrarse.home_register') }}">Registrarse</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('perfil.mostrar_perfil') }}">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('inicio_sesion.logout') }}">Cerrar Sesión</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
+    
     <div class="container mt-5">
         <h1>Eventos</h1>
         <table class="table table-striped">
@@ -37,7 +44,7 @@
             <tbody>
                 {% for evento in eventos %}
                 <tr>
-                    <td>{{ evento.nombre }}</td>
+                    <td><a href="{{ url_for('home.detalle_evento', evento_id=evento.id) }}">{{ evento.nombre }}</a></td>
                     <td>{{ evento.descripcion }}</td>
                     <td>{{ evento.autores }}</td>
                     <td>{{ evento.responsables }}</td>
