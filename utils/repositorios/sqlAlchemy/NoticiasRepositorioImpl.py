@@ -5,4 +5,4 @@ def agregar_noticias(noticia):
     db.session.add(noticia)
     db.session.commit()
 
-class NoticiasRepositorioImpl:
+# class NoticiasRepositorioImpl
