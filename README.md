@@ -1,124 +1,232 @@
-github: https://github.com/KevinRodriguezLima/ProceedingsEventos
-# LAB 9, 10 (ABAJO)
+# ProceedingsEventos
 
-# LAB 11
-# Acividad Laboratorio 11: Estilos de Programación
+# Laboratorio 9(CLEAN CODE)
+En este laboratorio, hemos implementado varias características siguiendo las convenciones y prácticas de codificación legible. A continuación se describen las prácticas aplicadas y se proporcionan fragmentos de código que ilustran su uso.
 
-# Estilos aplicados
-## Estilo de Programación: Things
-Lo utilizo al encapsular datos y comportamientos en clases. Por ejemplo en models/Actividad.py : 
+## Prácticas de Codificación Legible Aplicadas
 
-class Actividad(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100))
-    descripcion = db.Column(db.String(100))
-    autores = db.Column(db.String(100))
-    responsables = db.Column(db.String(100))
+1. Nombres Descriptivos:
+Utilizamos nombres de variables y funciones que son descriptivos y reflejan claramente su propósito.
 
-    def __init__(self, nombre, descripcion, autores, responsables):
-        self.nombre = nombre
-        self.descripcion = descripcion
-        self.autores = autores
-        self.responsables = responsables
+```python
 
-## Estilo de Programación: Persistent-Tables
-Tambien se puede decir que he utilizado el estilo de programación Persistent-Tables para gestionar y modelar los datos mediante el uso de tablas, ejemplo en models/Noticias.py:
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASSWORD')
+db_host = os.getenv('DB_HOST')
+db_name = os.getenv('DB_NAME')
 
+```
+2. Funciones Claras y Concisas:
+Las funciones se diseñaron para realizar una única tarea y se mantuvieron lo más breves y concisas posible.
+
+Funciones dentro de registrarse.py, son entendibles y cada una hace cosas diferentes.
+
+```python
+
+@registrarse_bp.route('/enviarRegistro', methods=['POST'])
+def registro():
+    nombres = request.form['nombres']
+    apellidos = request.form['apellidos']
+    email = request.form['email']
+    contrasenia = generate_password_hash(request.form['contrasenia'])
+
+    nuevo_usuario = Usuario(nombres=nombres, apellidos=apellidos, email=email, contrasenia=contrasenia)
+
+    try:
+        if registrar_usuario(nuevo_usuario):
+            session['usuario_id'] = nuevo_usuario.id
+            return redirect(url_for('home_bp.home'))
+        else:
+            flash('El usuario ya existe', 'error')
+            return redirect(url_for('registrarse_bp.register'))
+    except Exception as e:
+        flash(f'Ocurrió un error: {str(e)}', 'error')
+        return redirect(url_for('registrarse_bp.register'))
+```
+
+## Convenciones de Codificación
+
+
+Las convenciones de codificación de Python se han aplicado en todo el código, incluyendo:
+
+Indentación: Se utiliza una indentación de 4 espacios.
+
+Espacios en Blanco: Se dejan espacios en blanco alrededor de los operadores y después de las comas para mejorar la legibilidad.
+
+Nombres de Clases y Métodos: Las clases usan el estilo PascalCase y los métodos usan el estilo snake_case.
+
+
+# Laboratorio 10(SOLID)
+
+Para este laboratorio, hemos aplicado tres principios SOLID en la implementación de nuestro código. A continuación se describen los principios aplicados y se proporcionan fragmentos de código que ilustran su uso.
+
+## Principios SOLID Aplicados
+
+1. Single Responsibility Principle (SRP):
+
+Cada clase tiene una única responsabilidad y encapsula una parte bien definida de la lógica de la aplicación.
+
+```python
+
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nombres = db.Column(db.String(80))
+    apellidos = db.Column(db.String(80))
+    email = db.Column(db.String(120))
+    fecha_nacimiento = db.Column(db.Date)
+    nacionalidad = db.Column(db.String(120))
+    contrasenia = db.Column(db.String(120))
+
+    def __init__(self, nombres, apellidos, email, contrasenia):
+        self.nombres = nombres
+        self.apellidos = apellidos
+        self.email = email
+        self.contrasenia = contrasenia
+
+```
+
+Cada modulo y clase en nuestro proyecto tiene una unica responsabilidad. Por ejemplo, index.py se encarga solo de cargar el proyecto.
+
+2. Open/Closed Principle (OCP):
+
+El código está diseñado para ser extensible sin necesidad de modificar las clases existentes.
+
+```python
+
+def registrar_usuario(usuario):
+    try:
+        existente = Usuario.query.filter_by(email=usuario.email).first()
+        if existente:
+            return False
+        db.session.add(usuario)
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error registrando usuario: {e}")
+        return False
+
+```
+3. Dependency Inversion Principle (DIP):
+
+El código depende de abstracciones y no de concreciones.
+
+```python
+
+@registrarse_bp.route('/enviarRegistro', methods=['POST'])
+def registro():
+    nombres = request.form['nombres']
+    apellidos = request.form['apellidos']
+    email = request.form['email']
+    contrasenia = generate_password_hash(request.form['contrasenia'])
+
+    nuevo_usuario = Usuario(nombres=nombres, apellidos=apellidos, email=email, contrasenia=contrasenia)
+
+    try:
+        if registrar_usuario(nuevo_usuario):
+            session['usuario_id'] = nuevo_usuario.id
+            return redirect(url_for('home_bp.home'))
+        else:
+            flash('El usuario ya existe', 'error')
+            return redirect(url_for('registrarse_bp.register'))
+    except Exception as e:
+        flash(f'Ocurrió un error: {str(e)}', 'error')
+        return redirect(url_for('registrarse_bp.register'))
+
+```
+
+# Laboratorio 11
+
+En este laboratorio, hemos aplicado tres estilos de programación diferentes. A continuación se describen los estilos aplicados y se proporcionan fragmentos de código que ilustran su uso.
+
+## Estilos de Programación Aplicados
+
+1. Error/Exception Handling:
+
+Manejo de errores y excepciones para asegurar que el código se comporte correctamente incluso en condiciones inesperadas.
+
+```python
+
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        contrasenia = request.form['contrasenia']
+
+        try:
+            usuario = Usuario.query.filter_by(email=email).first()
+
+            if usuario and check_password_hash(usuario.contrasenia, contrasenia):
+                session['usuario_id'] = usuario.id
+                return redirect(url_for('home_bp.home'))
+            else:
+                flash('Email o contraseña incorrectos', 'error')
+        except Exception as e:
+            flash(f'Ocurrió un error: {str(e)}', 'error')
+            return redirect(url_for('inicio_sesion_bp.login'))
+
+    return render_template('login.html')
+
+```
+2. Persistent-Tables:
+
+Uso de tablas persistentes en una base de datos SQLAlchemy para almacenar y gestionar datos de usuarios.
+
+```python
+
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nombres = db.Column(db.String(80))
+    apellidos = db.Column(db.String(80))
+    email = db.Column(db.String(120))
+    fecha_nacimiento = db.Column(db.Date)
+    nacionalidad = db.Column(db.String(120))
+    contrasenia = db.Column(db.String(120))
+
+```
+3. Cookbook:
+Uso de un estilo de programación orientado a recetas o patrones bien definidos, como el patrón Blueprint de Flask para la organización de rutas y vistas.
+
+```python
+
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from models.entidades.Usuario import Usuario
+from utils.servicios.ServicioUsuario import registrar_usuario
 from utils.repositorios.sqlAlchemy.conexionBd import db
+from werkzeug.security import generate_password_hash
 
-class Noticias(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(100))
-    contenido = db.Column(db.Text)
-    fecha = db.Column(db.Date)
+registrarse_bp = Blueprint('registrarse_bp', __name__, template_folder='../templates/vista/HTML')
 
-    def __init__(self, titulo, contenido, fecha):
-        self.titulo = titulo
-        self.contenido = contenido
-        self.fecha = fecha
+@registrarse_bp.route('/')
+def register():
+    return render_template('registro.html')
 
-## Estilo de Programación: 
-Respecto a lo que tenia que implementar no estoy utilizando otros estilos ya que me toco sobre todo modelado de tablas y hmtl asi como controladores, añadire más codigo o en otras secciones donde se pueda usar otros estilos.
+@registrarse_bp.route('/enviarRegistro', methods=['POST'])
+def registro():
+    nombres = request.form['nombres']
+    apellidos = request.form['apellidos']
+    email = request.form['email']
+    contrasenia = generate_password_hash(request.form['contrasenia'])
 
-# Acividad Laboratorio 9( CLEAN CODE )
+    nuevo_usuario = Usuario(nombres=nombres, apellidos=apellidos, email=email, contrasenia=contrasenia)
 
-# Prácticas Aplicadas
+    try:
+        if registrar_usuario(nuevo_usuario):
+            session['usuario_id'] = nuevo_usuario.id
+            return redirect(url_for('home_bp.home'))
+        else:
+            flash('El usuario ya existe', 'error')
+            return redirect(url_for('registrarse_bp.register'))
+    except Exception as e:
+        flash(f'Ocurrió un error: {str(e)}', 'error')
+        return redirect(url_for('registrarse_bp.register'))
 
-# Nombres
+```
 
-Se utilizo nombres coherentes y descriptivos para funciones y variables. Por ejemplo: 
-@rutas.route('/')
-def home():
-    cronograma = Cronograma.query.all()
-    noticias = Noticias.query.all()
-    return render_template('inicio.html', cronograma=cronograma, noticias=noticias)
+# Corrección de Bugs, Code Smells y Vulnerabilidades
 
-`def home`se encarga de manejar la lógica para mostrar la página de `inicio`, dentro de esta función se obtienen los datos necesarios (cronogramas y noticias) de la base de datos para poder mostrarlos en la interfaz de usuario.
-
-#### Funciones
-
-Se dividió el código en funciones pequeñas y enfocadas. Por ejemplo, la función `initialize_database` en `inicio.py` se encarga únicamente de inicializar la base de datos.
-
-def initialize_database():
-    with app.app_context():
-        db.create_all()
+Utilizamos la extensión/plugin SonarLint en nuestro IDE para identificar y corregir bugs, code smells y vulnerabilidades. Aseguramos que el código sea limpio y eficiente siguiendo las recomendaciones de SonarLint.
 
 
-#### Comentarios
-
-Se agrego comentarios descriptivos  a funciones y rutas para mejorar la comprensión del código. Por ejemplo:
-
-def create_app():
-    
-    #Función para crear y configurar la aplicación Flask
-    app = Flask(__name__, template_folder='Vista/Assets/HTML')
-
-    #Configuración para SQLAlchemy
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Promundial1?@localhost/cronogramadb'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    db.init_app(app)
-
-    app.register_blueprint(rutas)
-
-    return app
-
-# Estructura de Código Fuente
-
-Se mantuvo el orden que se planteo en laboratorios anteriores, el código en módulos y paquetes claros y coherentes, siguiendo las convenciones de estructura de proyectos de Flask aunque todabia hay muchas cosas por hacer y unir con las partes de mis compañeros.
-
-# LAB 10
-
-# Principios SOLID aplicados
-# Single-responsibility principle (SRP)
-
-Cada módulo y clase en nuestro proyecto tiene una única responsabilidad. Por ejemplo, create_app se encarga solo de crear y configurar la aplicación Flask, y initialize_database se encarga de inicializar la base de datos.
-Tambien ServicioActividad.py se encarga exclusivamente de la lógica relacionada con las actividades: 
-
-from utils.repositorios.sqlAlchemy.ActividadRepositorioImpl import agregar_actividad
-from utils.repositorios.sqlAlchemy.conexionBd import db
-
-def registrar_actividad(actividad):
-    agregar_actividad(actividad)
-    return "guardando actividad"
 
 
-# Open-closed principle (OCP)
 
-Actualmente el codigo esta organizado para ser extendido sin modificar el código existente. Por ejemplo, al usar Blueprints en Flask, podemos agregar nuevas rutas sin modificar el código existente:
-
-app.register_blueprint(home, url_prefix='/')
-
-Tambien hay archivos como cronograma.py, noticias.py que mantienen una separacion clara para poder definir y manipular la BD, si se deseara añadir nuevas tablas o configuraciones solo se crea mas archivos pero siempre dentro de Repositorios/SQLAlchemy..
-
-# Dependency inversion principle (DIP)
-
-Se puede decir qe utilizamos este principio al utilizar inyección de dependencias para la configuración y creación de la base de datos.
-Ejemplo:
-
-from utils.repositorios.sqlAlchemy.conexionBd import db
-
-
-# Uso de SonarLint
-
-SonarLint me arrojaba una vulnerabilidad que es debido a que la contraseña de mi base de datos estaba expuesta, con mi grupo optamos todos por usar variables de entorno y lo solucionamos ya que era un problema general.
