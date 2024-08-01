@@ -15,12 +15,3 @@ class Evento(db.Model):
         self.descripcion = descripcion
         self.autores = autores
         self.responsables = responsables
-
-    def mostrar_evento(self):
-        return {
-            "id": self.id,
-            "nombre": self.nombre,
-            "descripcion": self.descripcion,
-            "autores": self.autores,
-            "responsables": self.responsables
-        }

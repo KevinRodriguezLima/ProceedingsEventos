@@ -18,15 +18,7 @@ class Documento(db.Model):
         self.evento_id = evento_id
         self.autores = autores
 
-    def mostrar_documento(self):
-        return {
-            "id": self.id,
-            "resumen": self.resumen,
-            "datos": self.datos,
-            "conclusion": self.conclusion,
-            "num_pag": self.num_pag,
-            "autores": self.autores
-        }
+
 
     @staticmethod
     def crear_documento(resumen, datos, conclusion, num_pag, evento_id, autores):
